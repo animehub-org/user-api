@@ -3,6 +3,7 @@ package org.animefoda.user.entities.user;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.animefoda.user.entities.role.Role;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -50,5 +51,9 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
     private Set<Role> roles;
+
+    public boolean isLoginCorrect(String password, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        return bCryptPasswordEncoder.matches(password, this.password);
+    }
 
 }

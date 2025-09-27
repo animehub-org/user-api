@@ -14,14 +14,11 @@ class UserService {
         this.repo = repo;
     }
 
-    public boolean isValidEmail(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        return email.matches(emailRegex);
-    }
-    Optional<User> findByEmail(String email)  throws NotAnEmail {
-        if(!isValidEmail(email)) {
-            throw new NotAnEmail(email);
-        }
+    public Optional<User> findByEmail(String email) {
         return repo.findByEmail(email);
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return this.repo.findByUsername(username);
     }
 }
