@@ -3,7 +3,7 @@ package org.animefoda.user.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.animefoda.user.configuration.ReCaptchaConfiguration;
-import org.animefoda.user.exception.InvalidReCaptchaException;
+import exception.InvalidReCaptchaException;
 import org.animefoda.user.response.GoogleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class ReCaptchaService {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public ReCaptchaService( ReCaptchaConfiguration reCaptchaConfiguration) {
+    public ReCaptchaService(ReCaptchaConfiguration reCaptchaConfiguration) {
         this.reCaptchaConfiguration = reCaptchaConfiguration;
         this.objectMapper = new ObjectMapper();
 
@@ -40,13 +40,13 @@ public class ReCaptchaService {
         if (response == null) {
             throw new InvalidReCaptchaException("reCAPTCHA response is null.");
         }
-        if(!this.responseSanityCheck(response)){
+        if (!this.responseSanityCheck(response)) {
             throw new InvalidReCaptchaException("Response contains invalid characters");
         }
 
         String remoteIP = this.getClientIpAddress();
 
-        URL url = new URL(GOOGLE_RECAPTCHA_VERIFY_URL );
+        URL url = new URL(GOOGLE_RECAPTCHA_VERIFY_URL);
 
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
@@ -68,8 +68,7 @@ public class ReCaptchaService {
 
         // The rest of your code to read the response remains the same
         BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream())
-        );
+                new InputStreamReader(con.getInputStream()));
         String inputLine;
         StringBuilder content = new StringBuilder();
         while ((inputLine = in.readLine()) != null) {
@@ -81,15 +80,16 @@ public class ReCaptchaService {
         return googleResponse;
     }
 
-    private boolean responseSanityCheck(String response){
-        return StringUtils.hasText(response)&&RESPONSE_PATTERN.matcher(response).matches();
+    private boolean responseSanityCheck(String response) {
+        return StringUtils.hasText(response) && RESPONSE_PATTERN.matcher(response).matches();
     }
 
-    private String getClientIpAddress(){
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    private String getClientIpAddress() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+                .getRequest();
 
         String xForwardedForHeader = request.getHeader("X-Forwarded-For");
-        if(xForwardedForHeader != null && !xForwardedForHeader.isEmpty()){
+        if (xForwardedForHeader != null && !xForwardedForHeader.isEmpty()) {
             return xForwardedForHeader.split(",")[0];
         }
         return request.getRemoteAddr();

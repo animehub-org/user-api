@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "entities")
-@ComponentScan(basePackages = { "org.animefoda.user", "services", "exception", "entities" })
+@ComponentScan(basePackages = { "org.animefoda.user", "services", "exception", "entities", "configuration" })
 @EntityScan(basePackages = "entities")
 public class UserApplication {
 
